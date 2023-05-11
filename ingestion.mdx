@@ -1,0 +1,74 @@
+---
+title: "Sending usage events to Tailfin"
+---
+
+A usage event is a JSON object with the following fields:
+```json
+{
+  "id":             string, // (required) transaction ID
+  "customer_id":    string, // (required) customer ID
+  "timestamp":      string, // (required) timestamp
+  "type":           string, // (required) the type of event
+  "properties":     object, // (optional) key/value pairs with details of the event
+}
+```
+
+The `id` field is a unique identifier for the event. It is used to deduplicate events that are sent multiple times.
+
+The `customer_id` field is a unique identifier for the customer that the event applies to. It is used to associate events with a customer. The customer will be created if it does not already exist. An ID can be the customers email address, or your systems unique identifier that you generate.
+
+The `timestamp` field is an RFC 3339 timestamp that indicates when the event occurred.
+
+The `type` works along with the properties map to describe the details of the event. For example, a content delivery network (CDN) might generate events of the type `http_request` with properties like `domain`, `path` and `bytes_sent` to support metric aggregation based on data transfer. They might also generate a different type of event, `cache_invalidation`, with a property `number_of_files`.
+
+All keys and values in the properties map should be represented as strings, even though the values will often be numeric. This is to prevent the loss of precision that often occurs in systems that use floating point numbers. Internally, Tailfin uses arbitrary precision decimals to provide exact results of computation.
+
+Events can be ingested by Tailfin's API:
+
+The events API accepts events in batches of up to 100 events. The events are sent as a JSON array of events or a single event object:
+
+```
+{
+  "id": "event-id",
+  "customer_id": "customer-id",
+  "timestamp": "2023-02-16T06:26:24Z",
+  "type": "api-call",
+  "properties": {
+    "method": "GET",
+    "status": "200",
+    "bytes": "42000"
+  }
+}
+```
+
+We can use the following `curl` command to send the event to Tailfin:
+
+```
+export TAILFIN_API_KEY=your-api-key
+export EVENT_ID=$(uuidgen)
+export TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+export CUSTOMER_ID=customer-id
+export EVENT_TYPE=api-call
+export METHOD=GET
+export STATUS=200
+export BYTES=42000
+curl -X POST https://app.tailfin.cloud/api/v1/events \
+   -H "Content-Type: application/json" \
+   -H "Authorization: Bearer ${TAILFIN_API_KEY}" \
+   -d "{
+     \"id\": \"${EVENT_ID}\",
+     \"customer_id\": \"${CUSTOMER_ID}\",
+     \"timestamp\": \"${TIMESTAMP}\",
+     \"type\": \"${EVENT_TYPE}\",
+     \"properties\": {
+       \"method\": \"${METHOD}\",
+       \"status\": \"${STATUS}\",
+       \"bytes\": \"${BYTES}\"
+     }
+   }"
+```
+
+
+
+
+
