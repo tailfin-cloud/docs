@@ -1,0 +1,57 @@
+{
+  "name": "Tailfin",
+  "logo": {
+    "light": "/logo/tailfin-logo.png",
+    "dark": "/logo/tailfin-logo.png"
+  },
+  "api": {
+    "auth": {
+        "method": "bearer"
+    }
+  },
+  "favicon": "/tailfin-favicon.png",
+  "colors": {
+    "primary": "#7C3AED",
+    "light": "#B387FF",
+    "dark": "#4F12B8"
+  },
+  "topbarCtaButton": {
+    "name": "Get Started",
+    "url": "https://tailfin.cloud/"
+  },
+  "topbarLinks": [
+    {
+      "name": "Schedule a Demo",
+      "url": "https://tailfin.cloud/"
+    }
+  ],
+  "anchors": [
+    {
+      "name": "Talk to Founders",
+      "icon": "rocketchat",
+      "url": "https://tailfin.cloud/"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "Introduction",
+      "pages": ["intropage"]
+    },
+    {
+      "group": "Ingestion",
+      "pages": ["ingestion"]
+    },
+    {
+      "group": "API",
+      "pages": [
+        "api-docs/ingest-usage",
+        "api-docs/get-usage"
+      ]
+    }
+  ],
+  "footerSocials": {
+      "linkedin": "https://www.linkedin.com/company/tailfin-cloud/"
+  },
+  "backgroundImage": "/background-image.png",
+  "openapi": "https://app.tailfin.cloud/api/v1/documentation/json"
+}
